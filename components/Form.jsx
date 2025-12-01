@@ -2,15 +2,18 @@ import React from "react";
 
 export default function Form(props) {
   const [ingredients, setIngredients] = React.useState([]);
+  const [isShown, setIsShown] = React.useState(false);
+
   const ingredientListitems = ingredients.map((item) => (
     <li key={item}>{item}</li>
   ));
 
-  const [isShown, setIsShown] = React.useState(false);
-
   function addIngredients(formData) {
     const newIngredient = formData.get("ingredient");
-    setIngredients((prevIngredients) => [...prevIngredients, newIngredient]);
+    const updatedList = [...ingredients, newIngredient];
+
+    setIngredients(updatedList);
+    props.onIngredientsUpdated(updatedList);
   }
 
   function toggleShown() {
@@ -35,7 +38,6 @@ export default function Form(props) {
         {isShown ? <h1>Ingredients on hand:</h1> : null}
         <ul>{ingredientListitems}</ul>
       </div>
-      {props.children(ingredients)}
     </>
   );
 }
