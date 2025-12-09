@@ -8,6 +8,13 @@ export default function MainBody() {
   const [hasEnoughIngredients, setHasEnoughIngredients] = React.useState(false);
   const [lastIngredients, setLastIngredients] = React.useState([]);
   const [recipeMarkdown, setRecipeMarkdown] = React.useState("");
+  const recipeSection = React.useRef(null);
+
+  React.useEffect(() => {
+    if (recipeMarkdown !== "" && recipeSection.current !== null) {
+      recipeSection.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [recipeMarkdown]);
 
   async function getRecipe() {
     const markdown = await getRecipeUsingGemini(lastIngredients);
@@ -30,7 +37,7 @@ export default function MainBody() {
       {hasEnoughIngredients ? (
         <div className="hero">
           <section className="send-box">
-            <div>
+            <div ref={recipeSection}>
               <h3 className="head-name">Ready for a recipe?</h3>
               <p className="Explain">
                 Generate a recipe from your list of ingredients
