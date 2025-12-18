@@ -1,50 +1,167 @@
-# React + Vite
+# Chef Gemini 🧑‍🍳
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A smart recipe generator powered by Google's Gemini AI that creates personalized recipes based on the ingredients you have on hand.
 
-Currently, two official plugins are available:
+![Chef Gemini](./public/images/chef.jpg)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌟 Overview
 
-## React Compiler
+Chef Gemini is a React-based web application that helps you make the most of your available ingredients. Simply input what you have in your kitchen, and let the AI-powered chef create delicious recipes tailored to your ingredients.
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## ✨ Features
 
-Note: This will impact Vite dev & build performances.
+- **Intelligent Recipe Generation**: Utilizes Google's Gemini 2.5 Flash model to create custom recipes
+- **Ingredient Management**: Easy-to-use interface for adding and tracking ingredients
+- **Markdown-Formatted Recipes**: Clean, readable recipe output with structured sections
+- **Responsive Design**: Works seamlessly across desktop and mobile devices
+- **Real-Time Updates**: Dynamic UI that responds to your ingredient additions
+- **Minimum Ingredient Requirement**: Ensures you have at least 4 ingredients before generating recipes
 
-## Expanding the ESLint configuration
+## 🚀 Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Prerequisites
 
-## Gemini API Integration
+- Node.js (v14 or higher)
+- npm or yarn
+- A Google Gemini API key
 
-This project integrates with the Google Gemini API to [briefly describe what your project does with Gemini, e.g., "generate text content", "process natural language queries", etc.].
+### Installation
 
-### Setup and Authentication (for Gemini API)
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/gemini-chef.git
+   cd gemini-chef
+   ```
 
-To enable Gemini API functionality, you'll need a Google Cloud Project and an API Key for the Generative Language API.
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-1.  **Google Cloud Project:** If you don't have one, create a Google Cloud Project.
-2.  **Enable Generative Language API:** Navigate to the Google Cloud Console and enable the "Generative Language API" for your project.
-3.  **Create API Key:** Generate an API Key in the Google Cloud Console.
+3. **Set up your environment variables**
+   
+   Create a `.env` file in the root directory:
+   ```env
+   VITE_GEMINI_API_KEY=your_gemini_api_key_here
+   ```
 
-**Security Warning:** Never hardcode your API key directly into your codebase or commit it to version control. It's crucial to store your API key securely, preferably using environment variables.
+   **Important**: Never commit your API key to version control. The `.env` file should be listed in `.gitignore`.
 
-To set an environment variable (replace `YOUR_GEMINI_API_KEY` with your actual key):
-```bash
-export GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
+   To get a Gemini API key:
+   - Visit the [Google AI Studio](https://makersuite.google.com/app/apikey)
+   - Create a new API key
+   - Enable the Generative Language API in your Google Cloud Console
+
+4. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open your browser**
+   
+   Navigate to `http://localhost:5173` (or the port shown in your terminal)
+
+## 🎯 Usage
+
+1. **Add Ingredients**: Type in the ingredients you have available (e.g., "tomatoes", "garlic", "pasta")
+2. **Build Your List**: Click "Add ingredient" to add each item to your list
+3. **Generate Recipe**: Once you have at least 4 ingredients, click "Get a recipe"
+4. **Enjoy**: The AI will generate a custom recipe with instructions and notes
+
+## 🏗️ Project Structure
+
 ```
-In your code, you can then access this key (e.g., `process.env.GEMINI_API_KEY` in Node.js or `os.environ.get("GEMINI_API_KEY")` in Python).
+gemini-chef/
+├── components/
+│   ├── HeaderFile.jsx      # Application header with branding
+│   ├── MainBody.jsx         # Main application logic and state management
+│   ├── Form.jsx             # Ingredient input form
+│   ├── Recipe.jsx           # Recipe display component
+│   └── gemini.js            # Gemini API integration
+├── src/
+│   ├── main.jsx             # Application entry point
+│   ├── App.jsx              # Root component (placeholder)
+│   └── index.css            # Global styles
+├── public/
+│   └── images/              # Static assets
+├── package.json             # Project dependencies
+└── vite.config.js           # Vite configuration
+```
 
-### Error Handling - `503 Service Unavailable`
+## 🛠️ Technologies Used
 
-You might encounter an `ApiError` with a `503 Service Unavailable` status and a message like "The model is overloaded. Please try again later." when making calls to the Gemini API. This indicates that the API service is temporarily experiencing high load or internal issues.
+- **React 19.2.0**: UI framework
+- **Vite 7.2.2**: Build tool and development server
+- **Google Gemini AI**: Recipe generation
+- **react-markdown**: Markdown rendering
+- **ESLint**: Code linting and quality
 
-**If you encounter this error:**
+## ⚠️ Error Handling
 
-*   **Retry Manually:** The issue is often transient. Try making the API request again after a short delay.
-*   **Implement Retry Logic:** For production-ready applications, it's highly recommended to implement a retry mechanism with exponential backoff. This will automatically re-attempt failed requests with increasing delays, improving the robustness of your application.
-*   **Check API Status:** Monitor the official [Google Cloud Status Dashboard](https://status.cloud.google.com/) for any reported outages or performance degradation related to the Generative Language API.
+### 503 Service Unavailable
 
-This `503` error is generally a service-side issue and not a problem with your application's code.
+If you encounter an error like:
+```
+ApiError: {"error":{"code":503,"message":"The model is overloaded. Please try again later.","status":"UNAVAILABLE"}}
+```
+
+This means the Gemini API is temporarily experiencing high traffic. To handle this:
+
+- **Wait and Retry**: The issue is usually temporary. Wait a few moments and try again.
+- **Implement Retry Logic**: For production use, consider adding exponential backoff retry logic.
+- **Check API Status**: Monitor the [Google Cloud Status Dashboard](https://status.cloud.google.com/) for service updates.
+
+### 404 Errors
+
+If you see 404 errors related to the API endpoint, verify that:
+- Your API key is correctly set in the `.env` file
+- The `VITE_` prefix is included in the environment variable name
+- You've restarted the development server after adding the `.env` file
+
+## 🔒 Security Best Practices
+
+- **Never hardcode API keys** in your source code
+- Always use environment variables for sensitive data
+- Add `.env` to your `.gitignore` file
+- For production deployments, use secure environment variable management provided by your hosting platform
+
+## 📦 Build for Production
+
+```bash
+npm run build
+```
+
+This creates an optimized production build in the `dist` folder.
+
+To preview the production build locally:
+```bash
+npm run preview
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- Google Gemini AI for powering the recipe generation
+- React team for the amazing framework
+- Vite for the blazing-fast development experience
+
+## 📧 Contact
+
+For questions or feedback, please open an issue on GitHub.
+
+---
+
+**Happy Cooking! 🍳**
